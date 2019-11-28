@@ -1,4 +1,33 @@
-package trabJav;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public abstract class Tela  {
+	protected JPanel painel = new JPanel();
+	protected boolean telaMontada = false;
+	protected String proximaTela = "atual";
+	
+	public abstract void montarTela();
+	
+	public void setTelaMontada(boolean TrueFalse) {
+		this.telaMontada = TrueFalse;
+	}
+	
+	public boolean getTelaMontada() {
+		return this.telaMontada;
+	}
+	
+	public void setProximaTela(String tela) {
+		this.proximaTela = tela;
+	}
+	
+	public String getProximaTela() {
+		return this.proximaTela;
+	}
+	
+	
+=======
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
