@@ -1,0 +1,71 @@
+  package trabJav;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+
+public class TelaLogin  extends Tela implements ActionListener {
+
+	private JFrame telaLogin = new JFrame();
+	//botoes
+	protected JLabel txtUsuario = new JLabel("USUARIO");
+	protected JTextField campoUsuario = new JTextField();
+	protected JLabel txtSenha = new JLabel("SENHA");
+	protected JPasswordField campoSenha = new JPasswordField();
+	//botao junto com a acao
+	protected Button btEnviar = new Button("ENVIAR"); 
+	
+	public void montarTela() {
+		this.montaFrame();
+		this.montaConteudo();
+	}
+
+	public void montaFrame() {
+		this.telaLogin.setSize(400,350);
+		this.telaLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.painel.setLayout(null);
+		this.telaLogin.add(this.painel);
+		
+		this.telaLogin.setVisible(true);
+	}
+
+	public void montaConteudo() {
+		
+		this.painel.add(this.txtUsuario);
+		this.txtUsuario.setBounds(170, 10, 300, 50);
+		
+		this.painel.add(this.campoUsuario);
+		this.campoUsuario.setBounds(150, 50, 100, 30);
+		
+		this.painel.add(this.txtSenha);
+		this.txtSenha.setBounds(170, 70, 300, 50);
+		
+		this.painel.add(this.campoSenha);
+		this.campoSenha.setBounds(150, 110, 100, 30);
+		
+		
+		this.painel.add(this.btEnviar);
+		this.btEnviar.setBounds(150, 150, 100, 30);
+		this.btEnviar.addActionListener(this);
+		
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+			TelaLoginController LogController = new TelaLoginController();
+			boolean verifica = LogController.verificaUsuarioSenha(this.campoUsuario.getText(), new String(this.campoSenha.getPassword() )  );
+			if(verifica == true) {
+				this.setProximaTela("menu");
+			}
+	}
+	
+	public void setTelalogin(Boolean TrueFalse) {
+		if(TrueFalse == true) {
+			this.telaLogin.setVisible(true);
+		} else {
+			this.telaLogin.setVisible(false);
+		}
+	}
+}
