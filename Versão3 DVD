@@ -1,0 +1,46 @@
+package trabJav;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+public class Dvd extends Midia{
+	private String tamanhoGB;
+
+	public void escreverArq() {
+		this.criarArquivo();
+		try {
+			FileWriter fw = new FileWriter("midia.txt", true);
+			BufferedWriter conexao = new BufferedWriter(fw);
+			conexao.write("Tamanho GB: ");
+			conexao.newLine();
+			conexao.write(this.tamanhoGB);
+			conexao.newLine();
+			conexao.write("Titulo: ");
+			conexao.newLine();
+			conexao.write(this.titulo);
+			conexao.newLine();
+			conexao.write("Descrição: ");
+			conexao.newLine();
+			conexao.write(this.descricao);
+			conexao.newLine();
+			conexao.write("###---###---###---###---");
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	public String getTamanhoGB() {
+		return tamanhoGB;
+	}
+
+	public void setTamanhoGB(String tamanhoGB) {
+		this.tamanhoGB = tamanhoGB;
+	}
+}
