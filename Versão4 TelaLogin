@@ -1,6 +1,5 @@
 package trabJav;
 
-
 import java.awt.*;
 import java.awt.event.*;
 
@@ -67,17 +66,6 @@ public class TelaLogin  extends Tela implements ActionListener {
 			this.telaLogin.setVisible(true);
 		} else {
 			this.telaLogin.setVisible(false);
-=======
-public class TelaLoginController {
-	private String usuario = "marcoaurelio";
-	private String senha = "123";
-	
-	public boolean verificaUsuarioSenha(String usuario, String senha) {
-		if(this.usuario.intern()  == usuario.intern() && this.senha.intern()  == senha.intern() ) {
-			return true;
-		} else {
-			return false;
-
 		}
 	}
 }
