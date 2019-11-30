@@ -1,0 +1,64 @@
+package trabJav;
+
+import java.awt.Button;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class TelaMenu extends Tela implements ActionListener {
+	private JLabel txtMenu = new JLabel("Menu");
+	private Button btLivros = new Button("Cadastrar ou consultar livros");
+	private Button btEmprestimo = new Button("Fazer emprestimos ou devolu��es");
+	
+	private JFrame telaMenu =  new JFrame();
+	
+	public void montarTela() {
+		this.montaFrame();
+		this.montaConteudo();
+	}
+
+	public void montaFrame() {
+		this.telaMenu.setSize(400,500);
+		this.telaMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.painel.setLayout(null);
+		this.telaMenu.add(this.painel);
+		
+		this.telaMenu.setVisible(true);
+		
+	}
+	
+	public void montaConteudo() {
+		this.painel.add(this.txtMenu);
+		this.txtMenu.setBounds(180, 40, 100, 30);
+		
+		this.painel.add(this.btLivros);
+		this.btLivros.setBounds(90, 80, 220, 30);
+		this.btLivros.addActionListener(this);
+		
+		this.painel.add(this.btEmprestimo);
+		this.btEmprestimo.setBounds(90, 120, 220, 30);
+		this.btEmprestimo.addActionListener(this);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.btLivros) {
+			this.setProximaTela("cadastro");
+		} else if (e.getSource()  == this.btEmprestimo) {
+			this.setProximaTela("emprestimo");
+		}
+	}
+	
+	public void setTelaMenu(Boolean TrueFalse) {
+		if(TrueFalse == true) {
+			this.telaMenu.setVisible(true);
+		} else {
+			this.telaMenu.setVisible(false);
+		}
+	}
+}
