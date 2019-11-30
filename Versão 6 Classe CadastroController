@@ -1,0 +1,142 @@
+package trabJav;
+
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class CadastroController {
+	
+	public void consultaTitulos() {
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		
+		
+		JPanel panel = new JPanel(new BorderLayout());
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.nomeIndice.size(); index++) {
+	       myList.add(index +" nome: " +  livro.nomeIndice.get(index));
+	    }
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	      
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    panel.add(scrollPane);
+	    JFrame frame = new JFrame("Demo");
+	    frame.add(panel);
+	    frame.setSize(500, 250);
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+	}
+	
+	public void consultaLivros() {
+		//poderia ser Dvd tamb�m, mas tem o mesmo retorno
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		
+		livro.lerArq();
+		
+		JPanel panel = new JPanel(new BorderLayout());
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.Livros.size(); index++) {
+	    	String texto = livro.Livros.get(index);
+	    	String parteTexto = " ";
+	    	
+	    	if(texto.length() > 150) {
+	    		int cont = 0;
+	    		for(int a=0; a < texto.length(); a+=100) {
+	    			if(a > texto.length()) {
+	    				break;
+	    			} else {
+	    				for(int b=a;b<=a+99;b++) {
+	    					if(b >= texto.length()) {
+			    				break;
+			    			}
+	    					parteTexto += texto.charAt(b);
+	    				}
+	    				myList.add(parteTexto);
+	    			}
+	    			parteTexto = " ";
+	    		}
+	    	} else {
+	    		myList.add(texto);
+	    	}
+	    	//myList.add( livro.Livros.get(index) );
+	    }
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    panel.add(scrollPane);
+	    JFrame frame = new JFrame("Demo");
+	    frame.add(panel);
+	    frame.setSize(800, 500);
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+	}
+	
+	public void cadastrar(JRadioButton radioLivro, JTextField campoNome, JTextField campoTitulo, JTextArea campoDescricao) {
+			
+		try {
+			
+			
+			String nome = campoNome.getText();
+			String titulo = campoTitulo.getText();
+			String descricao = campoDescricao.getText();
+
+			String tipo;
+			if(radioLivro.isSelected()) {
+				tipo = "livro";
+				Livro livro = new Livro();
+				livro.setNomeAutor(nome);
+				this.verificarCampoVazio(nome);
+				livro.setTitulo(titulo);
+				this.verificarCampoVazio(titulo);
+				livro.setDescricao(descricao);
+				this.verificarCampoVazio(titulo);
+				livro.escreverArq();
+				JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+			} else {
+				tipo = "dvd";
+				Dvd dvd = new Dvd();				
+				dvd.setTamanhoGB(nome);
+				this.verificarCampoVazio(nome);
+				dvd.setTitulo(titulo);
+				this.verificarCampoVazio(titulo);
+				dvd.setDescricao(descricao);
+				this.verificarCampoVazio(descricao);
+				//condicao abaixo checa o capo tamanhoGB se a pessoa colocou a opcao DVD
+				try {
+					int numeroConvertido = Integer.parseInt(nome);
+					dvd.setTamanhoGB(nome);
+					dvd.escreverArq();
+					JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(null, "Ao escolher a opcao DVD, o campo tamanho GB n�o pode contem letras!");
+				}
+			}
+			
+			
+		} catch(CampoInvalido ex) {
+			if(ex.getMessage() == "campoVazio") {
+				JOptionPane.showMessageDialog(null, "H� campos vazios em seu cadastro!");
+			}
+		}
+	}
+	
+	private void verificarCampoVazio(String campo) throws CampoInvalido {
+		if(campo.length() < 1) {
+			throw new CampoInvalido("campoVazio");
+		}
+	}
+}
