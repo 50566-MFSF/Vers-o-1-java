@@ -1,0 +1,208 @@
+package trabJav;
+
+import java.awt.BorderLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+public class EmprestimoController {
+	public ArrayList<String> Emprestimos = new ArrayList<String>();
+	public JPanel panelConsulta = new JPanel(new BorderLayout());
+	public JFrame frameConsulta = new JFrame("Demo");
+	
+	public JPanel panelIndice = new JPanel(new BorderLayout());
+	public JFrame frameIndice = new JFrame("indice");
+	
+	private JPanel panelConsultaPorPessoa = new JPanel(new BorderLayout());
+	private JFrame frameConsultaPorPessoa = new JFrame("Demo");
+
+	public void consultarEmprestimos() {
+		this.panelConsulta.removeAll();
+		this.Emprestimos.clear();
+		this.criarArquivo();
+		//lê as linhas
+		try {
+			File myObj = new File("emprestimos.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				this.Emprestimos.add(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < this.Emprestimos.size(); index++) {
+	    	String texto = this.Emprestimos.get(index);
+	    		myList.add(texto);
+	    }
+
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    
+	    this.panelConsulta.add(scrollPane);
+	    this.frameConsulta.add(this.panelConsulta);
+	    this.frameConsulta.setSize(500, 500);
+	    this.frameConsulta.setLocationRelativeTo(null);
+	    this.frameConsulta.setVisible(true);
+	}
+
+	public void cadastrarEmprestimo(String nomeUsuario ,JTextField indice, JTextField Ra, JFormattedTextField dataEmp, JFormattedTextField dataDev) {
+		this.criarArquivo();
+		try {
+			this.verificarCampoVazio(Ra.getText());
+			this.verificarCampoVazio(indice.getText());
+			this.verificarCampoVazio(dataEmp.getText());
+			this.verificarCampoVazio(dataDev.getText());
+			
+			
+			FileWriter fw = new FileWriter("emprestimos.txt", true);
+			BufferedWriter conexao = new BufferedWriter(fw);
+			conexao.write("Nome do usuario que cadastrou: ");
+			conexao.newLine();
+			conexao.write(nomeUsuario);
+			conexao.newLine();
+			conexao.write("RA do(a) aluno(a): " + Ra.getText());
+			conexao.newLine();
+			conexao.write("Indice do livro: " + indice.getText());
+			conexao.newLine();
+			conexao.write("Data do empréstimo: " + dataEmp.getText() + "     -       Data da Devolução: " + dataDev.getText());
+			conexao.newLine();
+			conexao.write("###---###---###---###---");
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.close();
+			JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Há campos vazios em seu cadastro!");
+		}
+	}
+
+	public void filtraPorPessoa(String nome) {
+		this.panelConsulta.removeAll();
+		this.Emprestimos.clear();
+		this.criarArquivo();
+		//lê as linhas
+		try {
+			File myObj = new File("emprestimos.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				this.Emprestimos.add(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
+	    List<String> myList0 = new ArrayList<>();
+	    for (int index = 0; index < this.Emprestimos.size(); index++) {
+	    	String texto = this.Emprestimos.get(index);
+	    		myList0.add(texto);
+	    }
+		
+		
+		this.panelConsultaPorPessoa.removeAll();
+		List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < this.Emprestimos.size(); index++) {
+	    	if(this.Emprestimos.get(index).intern() == nome.intern()) {
+	    		myList.add( this.Emprestimos.get(index-1));
+	    		myList.add( this.Emprestimos.get(index));
+	    		
+	    		int cont = index+1;
+	    		while(this.Emprestimos.get(cont).intern() != "###---###---###---###---") {
+	    			myList.add(this.Emprestimos.get(cont));
+	    			cont += 1;
+	    			if(this.Emprestimos.get(cont).intern() == "###---###---###---###---") {
+	    				myList.add( this.Emprestimos.get(cont));
+	    				break;
+	    			}
+	    		}
+	    		
+	    	}
+	    }
+	    
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    
+	    this.panelConsultaPorPessoa.add(scrollPane);
+	    this.frameConsultaPorPessoa.add(this.panelConsultaPorPessoa);
+	    this.frameConsultaPorPessoa.setSize(800, 500);
+	    this.frameConsultaPorPessoa.setLocationRelativeTo(null);
+	    this.frameConsultaPorPessoa.setVisible(true);
+		
+	}
+	
+	public void consultarIndices() {
+			this.panelIndice.removeAll();
+			//poderia ser Dvd também, mas tem o mesmo retorno
+			Livro livro = new Livro();
+			livro.pegarTituloTamanho();
+
+			//JPanel panel = new JPanel(new BorderLayout());
+			
+		    List<String> myList = new ArrayList<>();
+		    for (int index = 0; index < livro.nomeIndice.size(); index++) {
+		       myList.add("Indice: " + index + "  -  nome: " +  livro.nomeIndice.get(index));
+		    }
+		    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+		    JScrollPane scrollPane = new JScrollPane();
+		    scrollPane.setViewportView(list);
+
+		    list.setLayoutOrientation(JList.VERTICAL);
+		    
+		    this.panelIndice.add(scrollPane);
+		    this.frameIndice.add(this.panelIndice);
+		    this.frameIndice.setSize(500, 250);
+		    this.frameIndice.setLocationRelativeTo(null);
+		    this.frameIndice.setVisible(true);
+		    
+	    
+	}
+
+	public void criarArquivo() {
+		try {
+			File myObj = new File("emprestimos.txt");
+			if (myObj.createNewFile()) {
+				System.out.println("File created: " + myObj.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
+
+	private void verificarCampoVazio(String campo) throws CampoInvalido {
+		if(campo.length() < 1) {
+			throw new CampoInvalido("campoVazio");
+		}
+	}
+	
+}
