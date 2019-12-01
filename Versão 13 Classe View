@@ -1,0 +1,78 @@
+package trabJav;
+
+public class View {
+	public static TelaLogin telaLog = new TelaLogin();
+	public static TelaMenu menu = new TelaMenu();
+	public static TelaCadastro cadastro = new TelaCadastro();
+	public static TelaEmprestimo emprestimo = new TelaEmprestimo();
+
+	public static void main(String[] args) {		
+		//inicia a tela login
+		telaLog.setProximaTela("login");
+
+		//trava as telas em um loop cheio com if-else
+		while(true) {
+			fazerLogin();
+			fazerMenu();
+			fazerCadastro();
+			fazerEmprestimo();
+		}
+	}
+
+	public static void fazerLogin() {
+		if(telaLog.getProximaTela() == "login" && telaLog.getTelaMontada() != true) {
+			telaLog.montarTela();
+			telaLog.setTelaMontada(true);
+		} else if (telaLog.getProximaTela().intern() == "menu" && menu.getTelaMontada() != true) {
+			telaLog.setProximaTela("atual");
+			telaLog.setTelalogin(false);
+			menu.setProximaTela("menu");
+		}
+	}
+
+	public static void fazerMenu() {
+		if(menu.getProximaTela() == "menu" && menu.getTelaMontada() != true) {
+			menu.montarTela();
+			menu.setTelaMontada(true);
+		} else if(menu.getProximaTela().intern() == "cadastro" && cadastro.getTelaMontada()!= true) {
+			menu.setTelaMenu(false);
+			menu.setTelaMontada(false);
+			menu.setProximaTela("atual");
+			cadastro.setNomeUsuario(telaLog.getNomeUsuario());
+			cadastro.setProximaTela("cadastro");
+		} else if(menu.getProximaTela().intern() == "emprestimo" && emprestimo.getTelaMontada()!= true) {
+			menu.setTelaMenu(false);
+			menu.setTelaMontada(false);
+			menu.setProximaTela("atual");
+			emprestimo.setNomeUsuario(telaLog.getNomeUsuario());
+			emprestimo.setProximaTela("emprestimo");
+		}
+	}
+
+	public static void fazerCadastro() {
+		if(cadastro.getProximaTela().intern() == "cadastro" && cadastro.getTelaMontada() != true) {
+			cadastro.montarTela();
+			cadastro.setTelaMontada(true);
+		} else if(cadastro.getProximaTela().intern() == "menu") {
+			cadastro.setTelaCadastro(false);
+			cadastro.setTelaMontada(false);
+			cadastro.setProximaTela("atual");
+			menu.setTelaMontada(false);
+			menu.setProximaTela("menu");
+		}
+	}
+
+	public static void fazerEmprestimo() {
+		if(emprestimo.getProximaTela().intern() == "emprestimo" && emprestimo.getTelaMontada() != true) {
+			emprestimo.montarTela();
+			emprestimo.setTelaMontada(true);
+		} else if(emprestimo.getProximaTela().intern() == "menu") {
+			emprestimo.setTelaEmprestimo(false);
+			emprestimo.setTelaMontada(false);
+			emprestimo.setProximaTela("atual");
+			menu.setTelaMontada(false);
+			menu.setProximaTela("menu");
+		}
+	}
+
+}
