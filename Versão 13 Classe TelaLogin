@@ -1,0 +1,133 @@
+package trabJav;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+
+public class TelaLogin  extends Tela implements ActionListener {
+	private String nomeUsuario;
+
+	private JFrame telaLogin = new JFrame();
+	//Login
+	private JLabel txtUsuario = new JLabel("USUARIO");
+	private JTextField campoUsuario = new JTextField();
+	private JLabel txtSenha = new JLabel("SENHA");
+	private JPasswordField campoSenha = new JPasswordField();
+	//botao login
+	private Button btEnviar = new Button("ENVIAR"); 
+	
+	//cadastramento
+	private JLabel txtTituloCad = new JLabel("CADASTRAR USUARIO");
+	private JLabel txtCadUsuario = new JLabel("Novo Usuario");
+	private JTextField campoCadUsuario = new JTextField();
+	private JLabel txtCadSenha = new JLabel("Nova Senha");
+	private JTextField campoCadSenha = new JTextField();
+	private JLabel txtCadNome = new JLabel("Nome do Usuario");
+	private JTextField campoCadNome = new JTextField();
+	private Button btCadastrar = new Button("CADASTRAR"); 
+	
+	public void montarTela() {
+		this.montaFrame();
+		this.montaConteudo();
+	}
+
+	public void montaFrame() {
+		this.telaLogin.setSize(650,350);
+		this.telaLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.painel.setLayout(null);
+		this.telaLogin.add(this.painel);
+		
+		this.telaLogin.setVisible(true);
+	}
+
+	public void montaConteudo() {
+		
+		this.painel.add(this.txtUsuario);
+		this.txtUsuario.setBounds(170, 10, 300, 50);
+		
+		this.painel.add(this.campoUsuario);
+		this.campoUsuario.setBounds(150, 50, 100, 30);
+		
+		this.painel.add(this.txtSenha);
+		this.txtSenha.setBounds(170, 70, 300, 50);
+		
+		this.painel.add(this.campoSenha);
+		this.campoSenha.setBounds(150, 110, 100, 30);
+		
+		this.painel.add(this.btEnviar);
+		this.btEnviar.setBounds(150, 150, 100, 30);
+		this.btEnviar.addActionListener(this);
+
+		//cadastramento
+		this.painel.add(this.txtTituloCad);
+		this.txtTituloCad.setBounds(420, 10, 180, 30);
+
+		this.painel.add(this.txtCadUsuario);
+		this.txtCadUsuario.setBounds(420, 30, 100, 30);
+
+		this.painel.add(this.txtCadUsuario);
+		this.txtCadUsuario.setBounds(420, 50, 100, 30);
+
+		this.painel.add(this.campoCadUsuario);
+		this.campoCadUsuario.setBounds(420, 70, 100, 30);
+
+		this.painel.add(this.txtCadSenha);
+		this.txtCadSenha.setBounds(420, 100, 100, 30);
+
+		this.painel.add(this.campoCadSenha);
+		this.campoCadSenha.setBounds(420, 120, 100, 30);
+
+		this.painel.add(this.txtCadNome);
+		this.txtCadNome.setBounds(420, 150, 100, 30);
+
+		this.painel.add(this.campoCadNome);
+		this.campoCadNome.setBounds(420, 170, 100, 30);
+
+		this.painel.add(this.btCadastrar);
+		this.btCadastrar.setBounds(420, 220, 100, 30);
+		this.btCadastrar.addActionListener(this);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.btEnviar) {
+			this.fazerLogin();
+		} else if(e.getSource() == this.btCadastrar) {
+			 this.cadastrarUsuario();
+		}
+	}
+
+	public void cadastrarUsuario() {
+		CadastroUsuarioController cadastro = new CadastroUsuarioController(this.campoCadUsuario.getText(),this.campoCadSenha.getText(),this.campoCadNome.getText());
+		cadastro.cadastrar();
+	}
+
+	public void fazerLogin() {
+		TelaLoginController LogController = new TelaLoginController(this.campoUsuario.getText(), new String(this.campoSenha.getPassword() )  );
+		boolean verifica = LogController.verificaUsuarioSenha();
+		if(verifica == true) {
+			this.nomeUsuario = LogController.getNomeUsuario();
+			this.setProximaTela("menu");
+		} else {
+			JOptionPane.showMessageDialog(null, "Usuario ou senha incorretos!");
+		}
+	}
+
+	public void setTelalogin(Boolean TrueFalse) {
+		if(TrueFalse == true) {
+			this.telaLogin.setVisible(true);
+		} else {
+			this.telaLogin.setVisible(false);
+		}
+	}
+	
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
+}
