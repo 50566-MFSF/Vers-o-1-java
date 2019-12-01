@@ -1,0 +1,46 @@
+package trabJav;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+ 
+public class Livro extends Midia {
+	private String nomeAutor;
+	
+	public void escreverArq() {
+		this.criarArquivo();
+		try {
+			FileWriter fw = new FileWriter("midia.txt", true);
+			BufferedWriter conexao = new BufferedWriter(fw);
+			conexao.write("Nome do autor: ");
+			conexao.newLine();
+			conexao.write(this.nomeAutor);
+			conexao.newLine();
+			conexao.write("Titulo: ");
+			conexao.newLine();
+			conexao.write(this.titulo);
+			conexao.newLine();
+			conexao.write("Descri��o: ");
+			conexao.newLine();
+			conexao.write(this.descricao);
+			conexao.newLine();
+			conexao.write("###---###---###---###---");
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getNomeAutor() {
+		return nomeAutor;
+	}
+
+	public void setNomeAutor(String nomeAutor) {
+		this.nomeAutor = nomeAutor;
+	}
+
+}
