@@ -1,0 +1,233 @@
+package trabJav;
+
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class CadastroController {
+	private JPanel panelTitulos = new JPanel(new BorderLayout());
+	private JFrame frameTitulos = new JFrame("Demo");
+	
+	private JPanel panelLivros = new JPanel(new BorderLayout());
+	private JFrame frameLivros = new JFrame("Demo");
+	
+	private JPanel panelConsultaPorTitulo = new JPanel(new BorderLayout());
+	private JFrame frameConsultaPorTitulo = new JFrame("Demo");
+	
+	private JPanel panelConsultaPorPessoa = new JPanel(new BorderLayout());
+	private JFrame frameConsultaPorPessoa = new JFrame("Demo");
+	
+	public void consultaTitulos() {
+		this.panelTitulos.removeAll();
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.nomeIndice.size(); index++) {
+	       myList.add("indice: " + index +" nome: " +  livro.nomeIndice.get(index));
+	    }
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	      
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    this.panelTitulos.add(scrollPane);
+	    
+	    this.frameTitulos.add(this.panelTitulos);
+	    this.frameTitulos.setSize(500, 250);
+	    this.frameTitulos.setLocationRelativeTo(null);
+	    this.frameTitulos.setVisible(true);
+	}
+	
+	public void filtraPorPessoa(String nome) {
+		this.panelConsultaPorPessoa.removeAll();
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		livro.lerArq();
+
+		List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.Livros.size(); index++) {
+	    	if(livro.Livros.get(index).intern() == nome.intern()) {
+	    		myList.add( livro.Livros.get(index-1));
+	    		myList.add( livro.Livros.get(index));
+	    		
+	    		int cont = index+1;
+	    		while(livro.Livros.get(cont).intern() != "###---###---###---###---") {
+	    			myList.add( livro.Livros.get(cont));
+	    			cont += 1;
+	    			if(livro.Livros.get(cont).intern() == "###---###---###---###---") {
+	    				myList.add( livro.Livros.get(cont));
+	    				break;
+	    			}
+	    		}
+	    		
+	    	}
+	    }
+	    
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    
+	    this.panelConsultaPorPessoa.add(scrollPane);
+	    this.frameConsultaPorPessoa.add(this.panelConsultaPorPessoa);
+	    this.frameConsultaPorPessoa.setSize(800, 500);
+	    this.frameConsultaPorPessoa.setLocationRelativeTo(null);
+	    this.frameConsultaPorPessoa.setVisible(true);
+		
+	}
+	
+	public void filtraPorTitulo(String titulo) {
+		this.panelConsultaPorTitulo.removeAll();
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		livro.lerArq();
+
+		List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.Livros.size(); index++) {
+	    	if(livro.Livros.get(index).intern() == titulo.intern()) {
+	    		myList.add( livro.Livros.get(index-5));
+	    		myList.add( livro.Livros.get(index-4));
+	    		myList.add( livro.Livros.get(index-3));
+	    		myList.add( livro.Livros.get(index-2));
+	    		myList.add( livro.Livros.get(index-1));
+	    		myList.add( livro.Livros.get(index));
+	    		
+	    		int cont = index+1;
+	    		while(livro.Livros.get(cont).intern() != "###---###---###---###---") {
+	    			myList.add( livro.Livros.get(cont));
+	    			cont += 1;
+	    			if(livro.Livros.get(cont).intern() == "###---###---###---###---") {
+	    				myList.add( livro.Livros.get(cont));
+	    				break;
+	    			}
+	    		}
+	    		
+	    	}
+	    }
+	    
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    
+	    this.panelConsultaPorTitulo.add(scrollPane);
+	    this.frameConsultaPorTitulo.add(this.panelConsultaPorTitulo);
+	    this.frameConsultaPorTitulo.setSize(800, 500);
+	    this.frameConsultaPorTitulo.setLocationRelativeTo(null);
+	    this.frameConsultaPorTitulo.setVisible(true);
+		
+	}
+	
+	public void consultaLivros() {
+		this.panelLivros.removeAll();
+		//poderia ser Dvd também, mas tem o mesmo retorno
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+		
+		livro.lerArq();
+		
+		
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.Livros.size(); index++) {
+	    	String texto = livro.Livros.get(index);
+	    	String parteTexto = " ";
+	    	
+	    	if(texto.length() > 100) {
+	    		int cont = 0;
+	    		for(int a=0; a < texto.length(); a+=100) {
+	    			if(a > texto.length()) {
+	    				break;
+	    			} else {
+	    				for(int b=a;b<=a+99;b++) {
+	    					if(b >= texto.length()) {
+			    				break;
+			    			}
+	    					parteTexto += texto.charAt(b);
+	    				}
+	    				myList.add(parteTexto);
+	    			}
+	    			parteTexto = " ";
+	    		}
+	    	} else {
+	    		myList.add(texto);
+	    	}
+	    	//myList.add( livro.Livros.get(index) );
+	    }
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    this.panelLivros.add(scrollPane);
+	    
+	    this.frameLivros.add(this.panelLivros);
+	    this.frameLivros.setSize(800, 500);
+	    this.frameLivros.setLocationRelativeTo(null);
+	    this.frameLivros.setVisible(true);
+	}
+	
+	public void cadastrar(String nomeUsuario,JRadioButton radioLivro, JTextField campoNome, JTextField campoTitulo, JTextArea campoDescricao) {
+			
+		try {
+			String nome = campoNome.getText();
+			String titulo = campoTitulo.getText();
+			String descricao = campoDescricao.getText();
+
+			String tipo;
+			if(radioLivro.isSelected()) {
+				tipo = "livro";
+				Livro livro = new Livro();
+				livro.setNomeUsuario(nomeUsuario);
+				livro.setNomeAutor(nome);
+				this.verificarCampoVazio(nome);
+				livro.setTitulo(titulo);
+				this.verificarCampoVazio(titulo);
+				livro.setDescricao(descricao);
+				this.verificarCampoVazio(titulo);
+				livro.escreverArq();
+				JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+			} else {
+				tipo = "dvd";
+				Dvd dvd = new Dvd();
+				dvd.setNomeUsuario(nomeUsuario);
+				dvd.setTamanhoGB(nome);
+				this.verificarCampoVazio(nome);
+				dvd.setTitulo(titulo);
+				this.verificarCampoVazio(titulo);
+				dvd.setDescricao(descricao);
+				this.verificarCampoVazio(descricao);
+				//condicao abaixo checa o capo tamanhoGB se a pessoa colocou a opcao DVD
+				try {
+					int numeroConvertido = Integer.parseInt(nome);
+					dvd.setTamanhoGB(nome);
+					dvd.escreverArq();
+					JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(null, "Ao escolher a opcao DVD, o campo tamanho GB não pode contem letras!");
+				}
+			}
+			
+			
+		} catch(CampoInvalido ex) {
+			if(ex.getMessage() == "campoVazio") {
+				JOptionPane.showMessageDialog(null, "Há campos vazios em seu cadastro!");
+			}
+		}
+	}
+	
+	private void verificarCampoVazio(String campo) throws CampoInvalido {
+		if(campo.length() < 1) {
+			throw new CampoInvalido("campoVazio");
+		}
+	}
+}
