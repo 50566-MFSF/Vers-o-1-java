@@ -1,0 +1,68 @@
+package trabJav;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Scanner;
+
+public class TelaLoginController {
+	public ArrayList<String> linhasArqTxt = new ArrayList<String>();
+	public String usuario;
+	public String senha;
+	public String nomeUsuario;
+
+	public TelaLoginController(String usuario, String senha) {
+		this.usuario = criptograr(usuario);
+		this.senha = criptograr(senha);
+	}
+	
+	public boolean verificaUsuarioSenha() {
+		boolean resultado = false;
+		this.lerArq();
+		
+		for(int num=0;num <= this.linhasArqTxt.size()-1;num++) {
+			if(this.linhasArqTxt.get(num).intern() == "Usuario: ") {
+				if(this.linhasArqTxt.get(num+1).intern() == this.usuario.intern() && this.linhasArqTxt.get(num+3).intern() == this.senha.intern() ) {
+					resultado = true;
+					this.nomeUsuario = this.linhasArqTxt.get(num-1);
+					return resultado;
+				}
+			}
+		}
+		return resultado;
+	}
+	
+	public void lerArq() {
+		//faz a leitura do arquivo e coloca na arraylist linhasArqTxt
+		try {
+			File myObj = new File("cadastro.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				this.linhasArqTxt.add(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
+
+	public String criptograr(String pValor) {
+        return new String(Base64.getEncoder().encode(pValor.getBytes()));
+    }
+	
+	public static String descriptografar(String pValor) {
+        return new String(Base64.getDecoder().decode(pValor.getBytes()));
+    }
+	
+	
+	public String getNomeUsuario() {
+		return descriptografar(this.nomeUsuario.intern());
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
+}
