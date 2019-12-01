@@ -1,0 +1,155 @@
+package trabJav;
+import java.awt.Button;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.ParseException;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
+
+public class TelaEmprestimo extends Tela implements ActionListener {
+	public EmprestimoController controlador = new EmprestimoController();
+	public String nomeUsuario;
+
+	public JFrame telaEmprestimo = new JFrame();
+	private Button btVoltar = new Button("Voltar");
+	private Button btConsultaEmprestimos = new Button("Consultar emprestimos cadastrados");
+	
+	//cadastramento
+	private JLabel txtTitulo = new JLabel("Cadastrar Emprestimo");
+	private JLabel txtIndice = new JLabel("Indice do Livro/DVD: ");
+	private JTextField campoIndice = new JTextField();
+	private Button btConsultaIndices = new Button("Consultar Indices");
+	private JLabel txtRa = new JLabel("RA do(a) aluno(a): ");
+	private JTextField campoRa = new JTextField();
+
+	private JLabel txtDataEmp = new JLabel("Data do empréstimo: ");
+	private MaskFormatter maskDataEmp = null;
+	private JFormattedTextField campoDataEmp = new JFormattedTextField();
+	
+	private JLabel txtDataDev = new JLabel("Data da devolução: ");
+	private MaskFormatter maskDataDev = null;
+	private JFormattedTextField campoDataDev = new JFormattedTextField();
+	private Button btCadastrar = new Button("CADASTRAR");
+	private Button btAnonimo = new Button();
+	
+	public void montarTela() {
+		this.montaFrame();
+		this.montaConteudo();
+	}
+
+	public void montaFrame() {
+		this.telaEmprestimo.setSize(800,450);
+		this.telaEmprestimo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.painel.setLayout(null);
+		this.telaEmprestimo.add(this.painel);
+
+		this.telaEmprestimo.setVisible(true);
+	}
+
+	public void montaConteudo() {
+		this.painel.add(this.btVoltar);
+		this.btVoltar.setBounds(45, 20, 50, 30);
+		this.btVoltar.addActionListener(this);
+
+		this.painel.add(this.btConsultaEmprestimos);
+		this.btConsultaEmprestimos.setBounds(45, 80, 220, 30);
+		this.btConsultaEmprestimos.addActionListener(this);
+
+		this.painel.add(this.txtTitulo);
+		this.txtTitulo.setBounds(350, 82, 270, 30);
+
+		this.painel.add(this.txtIndice);
+		this.txtIndice.setBounds(350, 120, 270, 30);
+
+		this.painel.add(this.campoIndice);
+		this.campoIndice.setBounds(350, 140, 50, 30);
+
+		this.painel.add(this.btConsultaIndices);
+		this.btConsultaIndices.setBounds(410, 140, 120, 30);
+		this.btConsultaIndices.addActionListener(this);
+
+		this.painel.add(this.txtRa);
+		this.txtRa.setBounds(350, 170, 120, 30);
+
+		this.painel.add(this.campoRa);
+		this.campoRa.setBounds(350, 190, 100, 30);
+
+		//inicia as mascaras de campo
+		try{
+            this.maskDataEmp = new MaskFormatter("##/##/####");
+            this.maskDataEmp.setPlaceholderCharacter('_');
+            
+            this.maskDataDev = new MaskFormatter("##/##/####");
+            this.maskDataDev.setPlaceholderCharacter('_');
+		}
+		catch(ParseException excp) {
+            System.err.println("Erro na formatação: " + excp.getMessage());
+            System.exit(-1);
+		}
+
+		this.painel.add(this.txtDataEmp);
+		this.txtDataEmp.setBounds(350, 220, 135, 30);
+
+		this.campoDataEmp = new JFormattedTextField(this.maskDataEmp);
+		this.painel.add(this.campoDataEmp);
+		this.campoDataEmp.setBounds(350, 240, 80, 30);
+
+		this.painel.add(this.txtDataDev);
+		this.txtDataDev.setBounds(500, 220, 150, 30);
+
+		this.campoDataDev = new JFormattedTextField(this.maskDataEmp);
+		this.painel.add(this.campoDataDev);
+		this.campoDataDev.setBounds(500, 240, 80, 30);
+
+		this.painel.add(this.btCadastrar);
+		this.btCadastrar.setBounds(350, 300, 270, 30);
+		this.btCadastrar.addActionListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.btVoltar) {
+			this.setProximaTela("menu");
+		} else if(e.getSource() == this.btConsultaEmprestimos) {
+			this.consultarEmprestimos();
+		} else if(e.getSource() == this.btConsultaIndices) {
+			this.consultaIndices();
+		} else if(e.getSource() == this.btCadastrar ) {
+			this.cadastrar();
+			e.setSource(this.btAnonimo);
+		}
+	}
+
+	public void setTelaEmprestimo(boolean truefalse) {
+		this.telaEmprestimo.setVisible(truefalse);
+	}
+
+	public void consultarEmprestimos() {
+			this.controlador.consultarEmprestimos();
+	}
+
+	public void cadastrar() {
+		this.controlador.cadastrarEmprestimo(this.nomeUsuario,this.campoIndice, this.campoRa, this.campoDataEmp, this.campoDataDev);
+	}
+
+	public void consultaIndices() {
+			this.controlador.consultarIndices();
+	}
+	
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
+
+
+}
