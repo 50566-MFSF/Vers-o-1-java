@@ -1,0 +1,64 @@
+package trabJav;
+
+public class View {
+	public static TelaLogin telaLog = new TelaLogin();
+	public static Menu menu = new Menu();
+	public static Cadastro cadastro = new Cadastro();
+	public static Emprestimo emprestimo = new Emprestimo();
+	public static Livro livro = new Livro();
+	
+	public static void main(String[] args) {
+		
+		
+		//inicia a tela login
+		telaLog.setProximaTela("login");
+		
+		//trava as telas em um loop cheio com if-else
+		while(true) {
+			fazerTelaLogin();
+			fazerMenu();
+			fazerCadastro();
+		}
+		
+	}
+
+	public static void fazerTelaLogin() {
+		if(telaLog.getProximaTela() == "login" && telaLog.getTelaMontada() != true) {
+			telaLog.montarTela();
+			telaLog.setTelaMontada(true);
+		} else if (telaLog.getProximaTela().intern() == "menu" && menu.getTelaMontada() != true) {
+			telaLog.setProximaTela("atual");
+			telaLog.setTelalogin(false);
+			menu.setProximaTela("menu");
+		}
+	}
+
+	public static void fazerMenu() {
+		if(menu.getProximaTela() == "menu" && menu.getTelaMontada() != true) {
+			menu.montarTela();
+			menu.setTelaMontada(true);
+		} else if(menu.getProximaTela().intern() == "cadastro" && cadastro.getTelaMontada()!= true) {
+			menu.setTelaMenu(false);
+			menu.setTelaMontada(false);
+			cadastro.setProximaTela("cadastro");
+			menu.setProximaTela("atual");
+		}
+	}
+
+	public static void fazerCadastro() {
+		//EXCLUIR ESSA LINHA AQUI
+		//cadastro.setProximaTela("cadastro");
+		//
+		
+		if(cadastro.getProximaTela().intern() == "cadastro" && cadastro.getTelaMontada() != true) {
+			cadastro.montarTela();
+			cadastro.setTelaMontada(true);
+		} else if(cadastro.getProximaTela().intern() == "menu") {
+			cadastro.setTelaCadastro(false);
+			cadastro.setTelaMontada(false);
+			menu.setTelaMontada(false);
+			menu.setProximaTela("menu");
+			cadastro.setProximaTela("atual");
+		}
+	}
+}
