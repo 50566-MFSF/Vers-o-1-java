@@ -1,0 +1,119 @@
+package trabJav;
+
+import java.awt.BorderLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+public class EmprestimoController {
+	public ArrayList<String> Emprestimos = new ArrayList<String>();
+
+	public void consultarEmprestimos() {
+		this.criarArquivo();
+		//l� as linhas
+		try {
+			File myObj = new File("emprestimos.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				this.Emprestimos.add(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < this.Emprestimos.size(); index++) {
+	    	String texto = this.Emprestimos.get(index);
+	    		myList.add(texto);
+	    }
+
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    JPanel panel = new JPanel(new BorderLayout());
+	    panel.add(scrollPane);
+	    JFrame frame = new JFrame("Demo");
+	    frame.add(panel);
+	    frame.setSize(500, 500);
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+	}
+
+	public void cadastrarEmprestimo(JTextField indice, JTextField Ra, JFormattedTextField dataEmp, JFormattedTextField dataDev) {
+		this.criarArquivo();
+		try {
+			FileWriter fw = new FileWriter("emprestimos.txt", true);
+			BufferedWriter conexao = new BufferedWriter(fw);
+			conexao.write("RA do(a) aluno(a): " + Ra.getText());
+			conexao.newLine();
+			conexao.write("Indice do livro: " + indice.getText());
+			conexao.newLine();
+			conexao.write("Data do empr�stimo: " + dataEmp.getText() + "     -       Data da Devolu��o: " + dataDev.getText());
+			conexao.newLine();
+			conexao.write("###---###---###---###---");
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.newLine();
+			conexao.close();
+			JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void consultarIndices() {
+		//poderia ser Dvd tamb�m, mas tem o mesmo retorno
+		Livro livro = new Livro();
+		livro.pegarTituloTamanho();
+
+		JPanel panel = new JPanel(new BorderLayout());
+	    List<String> myList = new ArrayList<>();
+	    for (int index = 0; index < livro.nomeIndice.size(); index++) {
+	       myList.add("Indice: " + index + "  -  nome: " +  livro.nomeIndice.get(index));
+	    }
+	    JList<String> list = new JList<String>(myList.toArray(new String[myList.size()]));
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(list);
+
+	    list.setLayoutOrientation(JList.VERTICAL);
+	    panel.add(scrollPane);
+	    JFrame frame = new JFrame("Demo");
+	    frame.add(panel);
+	    frame.setSize(500, 250);
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+	}
+
+	public void criarArquivo() {
+		try {
+			File myObj = new File("emprestimos.txt");
+			if (myObj.createNewFile()) {
+				System.out.println("File created: " + myObj.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
+}
